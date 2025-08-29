@@ -21,16 +21,16 @@ function getHumanChoice() {
 
 function playRound(human_choice, computer_choice) {
     if (human_choice === computer_choice) {
-        console.log("Draw!");
+        result.innerHTML = "Draw!";
     } else if ((human_choice === "rock" && computer_choice === "scissors") || (human_choice === "paper" && computer_choice === "rock") || (human_choice === "scissors" && computer_choice === "paper")) {
-        console.log(`You win! ${human_choice} beats ${computer_choice}`);
+        result.innerHTML = `You win! ${human_choice} beats ${computer_choice}`;
         humanScore++;
     } else {
-        console.log(`You lose! ${human_choice} beats ${computer_choice}`);
+        result.innerHTML = `You lose! ${human_choice} beats ${computer_choice}`;
         computerScore++;
     }
 
-    console.log(`Human score: ${humanScore}\nComputer score: ${computerScore}`);
+    score.innerHTML = `Human score: ${humanScore}\nComputer score: ${computerScore}`;
 }
 
 function playGame() {
@@ -56,4 +56,47 @@ function playGame() {
     }
 }
 
-playGame();
+// playGame();
+
+function resetAll() {
+    humanScore = 0;
+    computerScore = 0;
+    choices.forEach(item => item.disabled = false);
+    result.textContent = "";
+    score.textContent = "";
+    reset.disabled = true;
+}
+
+function play(humanChoice) {
+    
+    if (humanScore == 5) {
+        result.innerHTML = "Overall winner: Human!";
+        choices.forEach(item => item.setAttribute("disabled", true));
+        reset.disabled = false;
+    } else if (computerScore == 5) {
+        result.innerHTML = "Overall winner: Computer!";
+        choices.forEach(item => item.setAttribute("disabled", true));
+        reset.disabled = false;
+    } else {
+        let computerChoice = getComputerChoice();
+        playRound(humanChoice, computerChoice);
+    } 
+}
+
+
+let rock = document.querySelector("#rock");
+let paper = document.querySelector("#paper");
+let scissors = document.querySelector("#scissors");
+let reset = document.querySelector("#reset");
+
+let result = document.querySelector("#result");
+let score = document.querySelector("#score");
+
+let choices = document.querySelectorAll(".human-choice");
+
+choices.forEach(item => item.addEventListener('click' , (event) => play(event.target.value)));
+
+reset.addEventListener('click', resetAll);
+
+
+
